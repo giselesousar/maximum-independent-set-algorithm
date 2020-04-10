@@ -30,10 +30,35 @@ def findVertex(graph):
 		if(len(graph[i]) == l):
 			v = i
 	return v	
+#deleta todas as referencias ao vertice v no grafo 
+def deleteV(graph, v):
+	graph.pop(v)
+	for i in graph.keys():
+		for j in graph[i]:
+			if(j == v):
+				graph[i].remove(j)
+	return graph
+
+
+def maxIndSet1(graph):
+	if(degree(graph) == 0):
+		return graph
+	v = findVertex(graph)
+	graph = deleteV(graph, v)
+	n = maxIndSet1(graph)
+	return n
+def maxIndSet2(graph):
+	if(degree(graph) == 0):
+		return graph
+	v = findVertex(graph)
+	for i in graph[v]:
+		graph = deleteV(graph, v)
+	n = maxIndSet2(graph)
+	return n
 
 #function to find the maximum independent set of a given graph
-#def maxIndSet(graph):
-	
+def maxIndSet(graph):
+	return max(maxIndSet1(graph), maxIndSet2(graph))
 
 graph = { "a" : ["c"],
           "b" : ["c", "e"],
@@ -44,6 +69,6 @@ graph = { "a" : ["c"],
         }
 	
 
-print(findVertex(graph))
+print(maxIndSet(graph))
 
 
