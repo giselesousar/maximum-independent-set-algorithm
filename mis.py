@@ -41,19 +41,19 @@ def delete(graph, v):
 	return graph
 
 def deleteVizinhos(graph, v):
-	print(v)
-	for i in graph[v]:
-		graph = delete(graph, i)
+	for i in range (0, len(graph[v])):
+		graph = delete(graph, graph[v][0])
 	return graph
 
 #function to find the maximum independent set of a given graph
 def maxIndSet(graph):
+	#print(graph)
 	if(degree(graph) == 0):
 		return graph
 	v = findVertex(graph)
-	n1 = maxIndSet(delete(graph, v))
-	#n2 = maxIndSet(deleteVizinhos(graph, v))
-	return n1
+	#n1 = maxIndSet(delete(graph, v))
+	n2 = maxIndSet(deleteVizinhos(graph, v))
+	return n2
 	#return max(n1, n2)
 
 graph = { "a" : ["c"],
