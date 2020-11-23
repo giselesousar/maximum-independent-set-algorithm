@@ -22,16 +22,17 @@ def degree(graph):
 		if(len(graph[i]) > l):
 			l = len(graph[i])
 	return l
+
 #function to find the vertex with highest degree of a given graph
 def findVertex(graph):
-	v = graph.keys()[0]
 	l = degree(graph)
 	for i in graph.keys():
 		if(len(graph[i]) == l):
 			v = i
 	return v	
+
 #deleta todas as referencias ao vertice v no grafo 
-def deleteV(graph, v):
+def delete(graph, v):
 	graph.pop(v)
 	for i in graph.keys():
 		for j in graph[i]:
@@ -39,26 +40,21 @@ def deleteV(graph, v):
 				graph[i].remove(j)
 	return graph
 
-
-def maxIndSet1(graph):
-	if(degree(graph) == 0):
-		return graph
-	v = findVertex(graph)
-	graph = deleteV(graph, v)
-	n = maxIndSet1(graph)
-	return n
-def maxIndSet2(graph):
-	if(degree(graph) == 0):
-		return graph
-	v = findVertex(graph)
+def deleteVizinhos(graph, v):
+	print(v)
 	for i in graph[v]:
-		graph = deleteV(graph, v)
-	n = maxIndSet2(graph)
-	return n
+		graph = delete(graph, i)
+	return graph
 
 #function to find the maximum independent set of a given graph
 def maxIndSet(graph):
-	return max(maxIndSet1(graph), maxIndSet2(graph))
+	if(degree(graph) == 0):
+		return graph
+	v = findVertex(graph)
+	n1 = maxIndSet(delete(graph, v))
+	#n2 = maxIndSet(deleteVizinhos(graph, v))
+	return n1
+	#return max(n1, n2)
 
 graph = { "a" : ["c"],
           "b" : ["c", "e"],
