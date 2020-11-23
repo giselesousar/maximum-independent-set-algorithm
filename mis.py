@@ -45,16 +45,27 @@ def deleteVizinhos(graph, v):
 		graph = delete(graph, graph[v][0])
 	return graph
 
-#function to find the maximum independent set of a given graph
-def maxIndSet(graph):
-	#print(graph)
+def maxIndSet1(graph):
 	if(degree(graph) == 0):
 		return graph
 	v = findVertex(graph)
-	#n1 = maxIndSet(delete(graph, v))
-	n2 = maxIndSet(deleteVizinhos(graph, v))
-	return n2
-	#return max(n1, n2)
+	n1 = maxIndSet1(delete(graph, v))
+	return graph
+
+def maxIndSet2(graph):
+	if(degree(graph) == 0):
+		return graph
+	v = findVertex(graph)
+	n1 = maxIndSet1(deleteVizinhos(graph, v))
+	return graph
+
+#function to find the maximum independent set of a given graph
+def maxIndSet(graph):
+	graph1 = dict(graph)
+	graph2 = dict(graph)
+	n1 = maxIndSet1(graph1)
+	n2 = maxIndSet2(graph2)
+	return graph1 if(len(n1) > len(n2)) else graph2
 
 graph = { "a" : ["c"],
           "b" : ["c", "e"],
