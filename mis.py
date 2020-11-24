@@ -19,6 +19,12 @@ end;
 # (will be the number of edges in the node with the highest number of neighboring)
 
 
+import matplotlib.pyplot as plt
+import networkx as nx
+
+# O(n)
+
+
 def degree(graph):
     l = 0
     for i in graph.keys():
@@ -28,6 +34,8 @@ def degree(graph):
 
 # function to find the vertex with highest degree of a given graph
 # (returns the last find vertex that has a degree equals to the graph´s degree)
+
+# O(n)
 
 
 def findVertex(graph):
@@ -40,23 +48,28 @@ def findVertex(graph):
 # function that deletes all references to vertex v in the graph
 
 
+# O(n²)
 def delete(graph, v):
     graph.pop(v)
-    for i in graph.keys():
-        for j in graph[i]:
+    for i in graph.keys():  # n
+        for j in graph[i]:  # n-1
             if(j == v):
                 graph[i].remove(j)
     return graph
 
 # function that deletes all neighbors (and their references) of a node
 
+# O(n³)
+
 
 def deleteVizinhos(graph, v):
-    for i in range(0, len(graph[v])):
-        graph = delete(graph, graph[v][0])
+    for i in range(0, len(graph[v])):  # n-1
+        graph = delete(graph, graph[v][0])  # O(n²)
         # a cada deletar os valores da chave em questão (representa o vértice que terá seus vizinhos excluídos)
         # vão automaticamente se deslocando para o início da fila, pois o espaço da primeiro posição foi liberado
     return graph
+
+# T(n) = T(n-1) + n² = O(n²)
 
 
 def maxIndSet1(graph):
@@ -65,6 +78,8 @@ def maxIndSet1(graph):
     v = findVertex(graph)
     maxIndSet1(delete(graph, v))
     return graph
+
+# O(n³)
 
 
 def maxIndSet2(graph):
@@ -92,40 +107,55 @@ def maxIndSet(graph):
     return graph1 if(len(n1) > len(n2)) else graph2
 
 
-graph = { "a" : ["c"],
-          "b" : ["c", "e"],
-          "c" : ["a", "b", "d", "e"],
-          "d" : ["c"],
-          "e" : ["c", "b"],
-          "f" : []
-        }
+graph = {"a": ["b", "c"],
+         "b": ["a", "c"],
+         "c": ["a", "b"],
+         "d": ["e", "f", "g", "h"],
+         "e": ["d", "f"],
+         "f": ["e", "d", "g", "h"],
+         "g": ["d", "f", "h", "n"],
+         "h": ["d", "f", "g", "n"],
+         "i": ["j", "k", "n"],
+         "j": ["i", "k", "l"],
+         "k": ["i", "j", "l", "m", "n"],
+         "l": ["j", "k", "m"],
+         "m": ["k", "l", "n"],
+         "n": ["i", "g", "h", "k", "m"],
+         "o": ["p", "q"],
+         "p": ["o", "q"],
+         "q": ["o", "p"],
+         "r": ["s", "t"],
+         "s": ["r", "t"],
+         "t": ["r", "s", "u"],
+         "u": ["t"],
+         "v": ["x"],
+         "x": ["v"]
+         }
 
 
-#Trecho de código referente a aquisição das imagens do grafo e do seu respectivo conjunto indepente máximo
+# Trecho de código referente a aquisição das imagens do grafo e do seu respectivo conjunto indepente máximo
 
-import networkx as nx
-import matplotlib.pyplot as plt
-graph_plot=nx.Graph()
-conjuntoMaximoIndependente_plot=nx.Graph()
+graph_plot = nx.Graph()
+conjuntoMaximoIndependente_plot = nx.Graph()
 
 for i in graph.keys():
-	graph_plot.add_node(i)
+    graph_plot.add_node(i)
 for i in graph.keys():
-	for j in graph[i]:
-		graph_plot.add_edge(i,j)
+    for j in graph[i]:
+        graph_plot.add_edge(i, j)
 
 conjuntoMaximoIndependente = maxIndSet(graph)
 print(conjuntoMaximoIndependente)
 
 for i in conjuntoMaximoIndependente.keys():
-	conjuntoMaximoIndependente_plot.add_node(i)
+    conjuntoMaximoIndependente_plot.add_node(i)
 for i in conjuntoMaximoIndependente.keys():
-	for j in graph[i]:
-		conjuntoMaximoIndependente_plot.add_edge(i,j)
+    for j in graph[i]:
+        conjuntoMaximoIndependente_plot.add_edge(i, j)
 
 
 nx.draw_networkx(graph_plot)
-plt.savefig("graph_plot.png") 
+plt.savefig("graph_plot.png")
 plt.clf()
 nx.draw_networkx(conjuntoMaximoIndependente_plot)
-plt.savefig("conjuntoMaximoIndependente_plot.png") 
+plt.savefig("conjuntoMaximoIndependente_plot.png")
