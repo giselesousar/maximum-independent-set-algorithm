@@ -54,8 +54,6 @@ def delete(graph, v):
 def deleteVizinhos(graph, v):
     for i in range(0, len(graph[v])):
         graph = delete(graph, graph[v][0])
-        # a cada deletar os valores da chave em questão (representa o vértice que terá seus vizinhos excluídos)
-        # vão automaticamente se deslocando para o início da fila, pois o espaço da primeiro posição foi liberado
     return graph
 
 
