@@ -127,9 +127,21 @@ graph = {"a": ["b", "c"],
 
 print(maxIndSet(graph))
 
-# Trecho de código referente a aquisição das imagens do grafo e do seu respectivo conjunto indepente máximo
-         
+# Trecho de código referente a aquisição da imagem do conjunto máximo independente 
 
+import networkx as nx
+import matplotlib.pyplot as plt
 
-# Trecho de código referente a aquisição das imagens do grafo e do seu respectivo conjunto indepente máximo
+conjuntoMaximoIndependente = maxIndSet(graph)
 
+conjuntoMaximoIndependente_plot = nx.Graph()
+
+for i in conjuntoMaximoIndependente.keys():
+    conjuntoMaximoIndependente_plot.add_node(i)
+
+for i in conjuntoMaximoIndependente.keys():
+    for j in conjuntoMaximoIndependente[i]:
+        conjuntoMaximoIndependente_plot.add_edge(i, j)
+
+nx.draw_networkx(conjuntoMaximoIndependente_plot)
+plt.savefig("conjuntoMaximoIndependente_plot.png")
