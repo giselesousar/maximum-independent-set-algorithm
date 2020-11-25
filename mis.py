@@ -22,6 +22,17 @@ end;
 # O(n)
 
 #o(v)
+
+# function to find the degree of a given graph
+# (will be the number of edges in the node with the highest number of neighboring)
+
+
+import matplotlib.pyplot as plt
+import networkx as nx
+
+# O(n)
+
+
 def degree(graph):
     l = 0
     for i in graph.keys():
@@ -35,6 +46,10 @@ def degree(graph):
 # O(n)
 
 #o(v) talvez mudar isso aqui porque o carlos falou
+
+# O(n)
+
+
 def findVertex(graph):
     l = degree(graph)
     for i in graph.keys():
@@ -56,9 +71,19 @@ def delete(graph, v):
 				gh[i].remove(j)
 	return gh
 
+# O(n²)
+def delete(graph, v):
+    graph.pop(v)
+    for i in graph.keys():  # n
+        for j in graph[i]:  # n-1
+            if(j == v):
+                graph[i].remove(j)
+    return graph
+
 # function that deletes all neighbors (and their references) of a node
 
 # O(n³)
+
 
 def deleteVizinhos(graph, v):
     for i in range(0, len(graph[v])):
@@ -77,6 +102,7 @@ def maxIndSet1(graph):
     return graph
 
 # O(n³)
+
 
 def maxIndSet2(graph):
     if(degree(graph) == 0):
@@ -145,5 +171,31 @@ graph = {"a": ["b", "c"],
 maxIndSet(graph)
 
 # Trecho de código referente a aquisição das imagens do grafo e do seu respectivo conjunto indepente máximo
+         }
 
 
+# Trecho de código referente a aquisição das imagens do grafo e do seu respectivo conjunto indepente máximo
+
+graph_plot = nx.Graph()
+conjuntoMaximoIndependente_plot = nx.Graph()
+
+for i in graph.keys():
+    graph_plot.add_node(i)
+for i in graph.keys():
+    for j in graph[i]:
+        graph_plot.add_edge(i, j)
+
+conjuntoMaximoIndependente = maxIndSet(graph)
+print(conjuntoMaximoIndependente)
+
+for i in conjuntoMaximoIndependente.keys():
+    conjuntoMaximoIndependente_plot.add_node(i)
+for i in conjuntoMaximoIndependente.keys():
+    for j in graph[i]:
+        conjuntoMaximoIndependente_plot.add_edge(i, j)
+
+nx.draw_networkx(graph_plot)
+plt.savefig("graph_plot.png")
+plt.clf()
+nx.draw_networkx(conjuntoMaximoIndependente_plot)
+plt.savefig("conjuntoMaximoIndependente_plot.png")
