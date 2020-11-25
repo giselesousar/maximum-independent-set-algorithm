@@ -32,11 +32,13 @@ end;
 
 
 def degree(graph):
-    l = 0
-    for i in graph.keys():
-        if(len(graph[i]) > l):
-            l = len(graph[i])
-    return l
+	l = 0
+	v = -1
+	for i in graph.keys():
+		if(len(graph[i]) > l):
+			l = len(graph[i])
+			v = i
+	return v
 
 # function to find the vertex with highest degree of a given graph
 # (returns the last find vertex that has a degree equals to the graph´s degree)
@@ -83,7 +85,7 @@ def delete(graph, v):
 # O(n³)
 
 
-def deleteVizinhos(graph, v):
+def deleteNeighbors(graph, v):
     for i in range(0, len(graph[v])):
         graph = delete(graph, graph[v][0])
     return graph
@@ -93,14 +95,18 @@ def deleteVizinhos(graph, v):
 
 import copy
 
-def maxIndSet(graph):	
-	if(degree(graph) == 0):
+def maxIndSet(graph):
+	v = degree(graph)
+
+	if(v == -1):
 		return graph
+
 	graph1 = copy.deepcopy(graph)
 	graph2 = copy.deepcopy(graph)
-	v = findVertex(graph)
+
 	n1 = delete(graph1, v)
 	n2 = deleteVizinhos(graph2, v)
+
 	return maxIndSet(n1) if(len(n1) > len(n2)) else maxIndSet(n2)
 
 graph = {"a": ["b", "c"],
