@@ -62,15 +62,6 @@ def findVertex(graph):
 
 # O(n²)
 
-def delete(graph, v):
-	gh = dict(graph)
-	gh.pop(v)
-	for i in gh.keys():  # n
-		for j in gh[i]:  # n-1
-			if(j == v):
-				gh[i].remove(j)
-	return gh
-
 # O(n²)
 def delete(graph, v):
     graph.pop(v)
@@ -105,7 +96,7 @@ def maxIndSet(graph):
 	graph2 = copy.deepcopy(graph)
 
 	n1 = delete(graph1, v)
-	n2 = deleteVizinhos(graph2, v)
+	n2 = deleteNeighbors(graph2, v)
 
 	return maxIndSet(n1) if(len(n1) > len(n2)) else maxIndSet(n2)
 
