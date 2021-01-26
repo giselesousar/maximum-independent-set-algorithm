@@ -1,5 +1,84 @@
 # -*- coding: utf-8 -*-
 
+import matplotlib.pyplot as plt
+import networkx as nx
+from itertools import combinations, chain
+import itertools
+import copy
+from random import randrange
+
+################### GRAPH GENERATOR ###################
+def generateGraph(n):
+    mydict = {}
+    for i in range(1, n):
+        values = []
+        for j in range(1, randrange(1, n)):
+            if(i != j):
+                values.append(str(j))
+        mydict[str(i)] = values
+
+    return mydict
+
+
+################### Brute Force #####################
+
+def plotBF(conjuntoMaximoIndependente):
+
+    if (conjuntoMaximoIndependente == None):
+        print("Grafo vazio")
+        return
+
+    conjuntoMaximoIndependente_plot = nx.Graph()
+
+    for i in conjuntoMaximoIndependente:
+        conjuntoMaximoIndependente_plot.add_node(i)
+
+    nx.draw_networkx(conjuntoMaximoIndependente_plot)
+    plt.savefig("conjuntoMaximoIndependente_forcaBruta.png")
+
+def findsubsets(s):
+    subsets = []
+    for i in range(len(s), 0, -1):
+        subsets.append(list(itertools.combinations(s, i)))
+    return subsets
+
+
+def maxIndSetBF(graph):
+    subsets_lists = findsubsets(graph)
+
+    for subset_list in subsets_lists:  # [('a', 'b', 'c')]
+        for subset in subset_list:  # ('a', 'b', 'c')
+            flag = False
+            for vertex in subset:  # a
+                for vertex_else in subset:
+                    if(vertex_else != vertex):
+                        if vertex_else in graph[vertex]:
+                            flag = True
+                            break
+                if(flag):
+                    break
+            if (not flag):
+                return subset
+    return None
+
+######################################################
+
+################ Heuristic Algorithm #################
+
+def plotHA(conjuntoMaximoIndependente):
+
+    conjuntoMaximoIndependente_plot = nx.Graph()
+
+    for i in conjuntoMaximoIndependente.keys():
+        conjuntoMaximoIndependente_plot.add_node(i)
+
+    for i in conjuntoMaximoIndependente.keys():
+        for j in conjuntoMaximoIndependente[i]:
+            conjuntoMaximoIndependente_plot.add_edge(i, j)
+
+    nx.draw_networkx(conjuntoMaximoIndependente_plot)
+    plt.savefig("conjuntoMaximoIndependente_algoritmoHeuristico.png")
+
 def degree(graph):
     l = 0
     v = -1
@@ -25,7 +104,7 @@ def deleteNeighbors(graph, v):
 
 import copy
 
-def maxIndSet(graph):
+def maxIndSetHA(graph):
     v = degree(graph)
 
     if(v == -1):
@@ -37,7 +116,10 @@ def maxIndSet(graph):
     n1 = delete(graph1, v)
     n2 = deleteNeighbors(graph2, v)
 
-    return maxIndSet(n1) if(len(n1) > len(n2)) else maxIndSet(n2)
+    return maxIndSetHA(n1) if(len(n1) > len(n2)) else maxIndSetHA(n2)
+
+
+######################################################
 
 
 # INSTÂNCIA DO PROBLEMA
@@ -67,24 +149,8 @@ graph = {"a": ["b", "c"],
          "x": ["v"]
 		}
 
-print(maxIndSet(graph))
+graph = generateGraph(10)
+print(graph)
+plotBF(maxIndSetBF(graph))
+#plotHA(maxIndSetHA(graph))
 
-
-# Trecho de código referente a aquisição da imagem do conjunto máximo independente 
-
-import networkx as nx
-import matplotlib.pyplot as plt
-
-conjuntoMaximoIndependente = maxIndSet(graph)
-
-conjuntoMaximoIndependente_plot = nx.Graph()
-
-for i in conjuntoMaximoIndependente.keys():
-    conjuntoMaximoIndependente_plot.add_node(i)
-
-for i in conjuntoMaximoIndependente.keys():
-    for j in conjuntoMaximoIndependente[i]:
-        conjuntoMaximoIndependente_plot.add_edge(i, j)
-
-nx.draw_networkx(conjuntoMaximoIndependente_plot)
-plt.savefig("conjuntoMaximoIndependente_plot.png")
