@@ -10,12 +10,23 @@ from random import randrange
 ################### GRAPH GENERATOR ###################
 def generateGraph(n):
     mydict = {}
-    for i in range(1, n):
-        values = []
-        for j in range(1, randrange(1, n)):
-            if(i != j):
-                values.append(str(j))
-        mydict[str(i)] = values
+    quantEdge = (n * (n - 1))/2
+    edges = []
+    for i in range(1, n + 1):
+        mydict[str(i)] = []
+
+    for i in range(1, randrange(1, quantEdge)):
+        edge = [str(randrange(1, n)), str(randrange(1, n))]
+        copia = copy.deepcopy(edge)
+        copia.reverse()      
+        while((edge[0] == edge[1]) or (edge in edges) or (copia in edges)):
+            edge = [str(randrange(1, n)), str(randrange(1, n))]
+            copia = copy.deepcopy(edge)
+            copia.reverse()  
+        edges.append(edge)
+    for edge in edges:
+        mydict[edge[0]].append(str(edge[1]))
+        mydict[edge[1]].append(str(edge[0]))
 
     return mydict
 
@@ -149,8 +160,7 @@ graph = {"a": ["b", "c"],
          "x": ["v"]
 		}
 
-graph = generateGraph(10)
+graph = generateGraph(5)
 print(graph)
 plotBF(maxIndSetBF(graph))
 #plotHA(maxIndSetHA(graph))
-
