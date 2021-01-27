@@ -6,6 +6,7 @@ from itertools import combinations, chain
 import itertools
 import copy
 from random import randrange
+import time
 
 ################### GRAPH GENERATOR ###################
 def generateGraph(n):
@@ -170,10 +171,38 @@ graph = {
         "f": ["b", "e"],
 }
 """
+tamanhos = [4, 8, 12, 16, 20, 24] ## 16, 32
 
-graph = generateGraph(25)
-print(maxIndSetBF(graph))
+for i in tamanhos:
+    print("Tamanho: " + str(i))
+    graph = generateGraph(i)
 
+    somaBF = 0
+    somaHA = 0
+    quant = 3
+
+    for j in range(1, quant+1):
+        copia = copy.deepcopy(graph)
+
+        inicio = time.time()
+        maxIndSetBF(copia)
+        fim = time.time()
+
+        tempo = round((fim - inicio) * 1000, 4)
+        somaBF += tempo
+        print("Tempo FB: " + str(tempo))
+
+        inicio = time.time()
+        maxIndSetHA(copia)
+        fim = time.time()
+
+        tempo = round((fim - inicio) * 1000, 4)
+        somaHA += tempo
+        print("Tempo HA: " + str(tempo))
+
+    print("Media de tempo BF: " + str(somaBF/quant))
+    print("Media de tempo HA: " + str(somaHA/quant))
+    print()
     
 
 
