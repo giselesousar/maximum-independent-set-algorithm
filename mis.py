@@ -9,6 +9,7 @@ from random import randrange
 import time
 
 ################### GRAPH GENERATOR ###################
+
 def generateGraph(n):
     mydict = {}
     quantEdge = (n * (n - 1))/2
@@ -47,6 +48,7 @@ def plotBF(conjuntoMaximoIndependente):
 
     nx.draw_networkx(conjuntoMaximoIndependente_plot)
     plt.savefig("conjuntoMaximoIndependente_forcaBruta.png")
+    plt.clf()
 
 def findsubsets(s):
     subsets = []
@@ -58,10 +60,10 @@ def findsubsets(s):
 def maxIndSetBF(graph):
     subsets_lists = findsubsets(graph)
 
-    for subset_list in subsets_lists:  # [('a', 'b', 'c')]
-        for subset in subset_list:  # ('a', 'b', 'c')
+    for subset_list in subsets_lists: 
+        for subset in subset_list: 
             flag = False
-            for vertex in subset:  # a
+            for vertex in subset: 
                 for vertex_else in subset:
                     if(vertex_else != vertex):
                         if vertex_else in graph[vertex]:
@@ -90,6 +92,7 @@ def plotHA(conjuntoMaximoIndependente):
 
     nx.draw_networkx(conjuntoMaximoIndependente_plot)
     plt.savefig("conjuntoMaximoIndependente_algoritmoHeuristico.png")
+    plt.clf()
 
 def degree(graph):
     l = 0
@@ -114,8 +117,6 @@ def deleteNeighbors(graph, v):
         graph = delete(graph, graph[v][0])
     return graph
 
-import copy
-
 def maxIndSetHA(graph):
     v = degree(graph)
 
@@ -136,73 +137,36 @@ def maxIndSetHA(graph):
 
 # INSTÂNCIA DO PROBLEMA
 
-# graph = {"a": ["b", "c"],
-#          "b": ["a", "c"],
-#          "c": ["a", "b"],
-#          "d": ["e", "f", "g", "h"],
-#          "e": ["d", "f"],
-#          "f": ["e", "d", "g", "h"],
-#          "g": ["d", "f", "h", "n"],
-#          "h": ["d", "f", "g", "n"],
-#          "i": ["j", "k", "n"],
-#          "j": ["i", "k", "l"],
-#          "k": ["i", "j", "l", "m", "n"],
-#          "l": ["j", "k", "m"],
-#          "m": ["k", "l", "n"],
-#          "n": ["i", "g", "h", "k", "m"],
-#          "o": ["p", "q"],
-#          "p": ["o", "q"],
-#          "q": ["o", "p"],
-#          "r": ["s", "t"],
-#          "s": ["r", "t"],
-#          "t": ["r", "s", "u"],
-#          "u": ["t"],
-#          "v": ["x"],
-#          "x": ["v"]
-# 		}
+graph = {"a": ["b", "c"],
+         "b": ["a", "c"],
+         "c": ["a", "b"],
+         "d": ["e", "f", "g", "h"],
+         "e": ["d", "f"],
+         "f": ["e", "d", "g", "h"],
+         "g": ["d", "f", "h", "n"],
+         "h": ["d", "f", "g", "n"],
+         "i": ["j", "k", "n"],
+         "j": ["i", "k", "l"],
+         "k": ["i", "j", "l", "m", "n"],
+         "l": ["j", "k", "m"],
+         "m": ["k", "l", "n"],
+         "n": ["i", "g", "h", "k", "m"],
+         "o": ["p", "q"],
+         "p": ["o", "q"],
+         "q": ["o", "p"],
+         "r": ["s", "t"],
+         "s": ["r", "t"],
+         "t": ["r", "s", "u"],
+         "u": ["t"],
+         "v": ["x"],
+         "x": ["v"]
+		}
 
-"""
-graph = {
-        "a": ["c", "e"],
-        "b": ["d", "f"],
-        "c": ["a", "d"],
-        "d": ["c", "b"],
-        "e": ["a", "f"],
-        "f": ["b", "e"],
-}
-"""
-tamanhos = [4, 8, 12, 16, 20, 24] ## 16, 32
+# Execução
 
-for i in tamanhos:
-    print("Tamanho: " + str(i))
-    graph = generateGraph(i)
+# Plotagem do retorno do algoritmo força bruta
+plotBF(maxIndSetBF(graph))
 
-    somaBF = 0
-    somaHA = 0
-    quant = 3
-
-    for j in range(1, quant+1):
-        copia = copy.deepcopy(graph)
-
-        inicio = time.time()
-        maxIndSetBF(copia)
-        fim = time.time()
-
-        tempo = round((fim - inicio) * 1000, 4)
-        somaBF += tempo
-        print("Tempo FB: " + str(tempo))
-
-        inicio = time.time()
-        maxIndSetHA(copia)
-        fim = time.time()
-
-        tempo = round((fim - inicio) * 1000, 4)
-        somaHA += tempo
-        print("Tempo HA: " + str(tempo))
-
-    print("Media de tempo BF: " + str(somaBF/quant))
-    print("Media de tempo HA: " + str(somaHA/quant))
-    print()
-    
-
+# Plotagem do retorno do algoritmo heurístico
+plotHA(maxIndSetHA(graph))
 
